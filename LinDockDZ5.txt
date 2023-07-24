@@ -1,0 +1,379 @@
+https://github.com/SB44444/LinDockDz5.git
+
+Контейнеризация (семинары)
+Урок 5. Docker Compose и Docker Swarm
+1) создать сервис, состоящий из 2 различных контейнеров: 1 - веб, 2 - БД (compose)
+Задание со звездочкой - повышенной сложности..
+** не обязательно 2) необходимо создать 3 сервиса в каждом окружении (dev, prod, lab)
+** не обязательно 3) по итогу на каждой ноде должно быть по 2 работающих контейнера
+4) выводы зафиксировать
+
+Выполнение:
+1. Создаём рабочую директорию
+2. Создаём файл compose.yaml из доступных вариантов
+3. Записываем исполняемый манифест:
+version: ‘3.9’
+
+services:
+
+  db:
+    image: mariadb:10.10.2
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 12345
+
+  adminer:
+    image: adminer:4.8.1
+    restart: always
+    ports:
+      - 6080:8080
+	  
+4. Запускаем docker-compose
+5. Контролируем рабоспособность
+Всё работает, быстро устанавливается и запускается
+
+
+root@sbvb:/home/sb# ls
+
+ snap    Документы   Изображения   Общедоступные   Шаблоны
+
+ Видео   Загрузки    Музыка       'Рабочий стол'
+
+root@sbvb:/home/sb# mkdir compose_dz
+
+root@sbvb:/home/sb# ls
+
+ compose_dz   Видео       Загрузки      Музыка         'Рабочий стол'
+
+ snap         Документы   Изображения   Общедоступные   Шаблоны
+
+root@sbvb:/home/sb# cd /home/sb/compose_dz
+
+root@sbvb:/home/sb/compose_dz# touch compose.yaml
+
+root@sbvb:/home/sb/compose_dz# nano compose.yaml
+
+root@sbvb:/home/sb/compose_dz# docker-compose up
+
+ERROR: Version "‘3.9’" in "./compose.yaml" is invalid.
+
+root@sbvb:/home/sb/compose_dz# docker-compose version
+
+docker-compose version 1.29.2, build unknown
+
+docker-py version: 5.0.3
+
+CPython version: 3.10.6
+
+OpenSSL version: OpenSSL 3.0.2 15 Mar 2022
+
+root@sbvb:/home/sb/compose_dz# apt-get update
+
+Сущ:1 http://ru.archive.ubuntu.com/ubuntu jammy InRelease
+
+Сущ:2 http://ru.archive.ubuntu.com/ubuntu jammy-updates InRelease
+
+Сущ:3 http://security.ubuntu.com/ubuntu jammy-security InRelease               
+
+Пол:4 http://ru.archive.ubuntu.com/ubuntu jammy-backports InRelease [108 kB]   
+
+Получено 108 kB за 3с (37,1 kB/s)         
+
+Чтение списков пакетов… Готово
+
+root@sbvb:/home/sb/compose_dz# apt-get upgrade
+
+Чтение списков пакетов… Готово
+
+Построение дерева зависимостей… Готово
+
+Чтение информации о состоянии… Готово         
+
+Расчёт обновлений… Готово
+
+Обновлено 0 пакетов, установлено 0 новых пакетов, для удаления отмечено 0 пакетов, и 0 пакетов не обновлено.
+
+root@sbvb:/home/sb/compose_dz# docker-compose version
+
+docker-compose version 1.29.2, build unknown
+
+docker-py version: 5.0.3
+
+CPython version: 3.10.6
+
+OpenSSL version: OpenSSL 3.0.2 15 Mar 2022
+
+root@sbvb:/home/sb/compose_dz# ^C
+
+root@sbvb:/home/sb/compose_dz# 
+
+root@sbvb:/home/sb/compose_dz# nano compose.yaml
+
+root@sbvb:/home/sb/compose_dz# docker-compose version
+
+docker-compose version 1.29.2, build unknown
+
+docker-py version: 5.0.3
+
+CPython version: 3.10.6
+
+OpenSSL version: OpenSSL 3.0.2 15 Mar 2022
+
+root@sbvb:/home/sb/compose_dz# docker-compose up
+
+Creating network "compose_dz_default" with the default driver
+
+Pulling db (mariadb:10.10.2)...
+
+10.10.2: Pulling from library/mariadb
+
+10ac4908093d: Pulling fs layer
+
+44779101e748: Pulling fs layer
+
+a721db3e3f3d: Downloading [>                                                  ] 44779101e748: Downloading [=====================>                             ] 10ac4908093d: Downloading [>                                                  ]  311.3kB/30.43MBwnload complete
+
+10ac4908093d: Downloading [=>                                                 ]  622.6kB/30.43MBwnloading [=======>                                           ]  819.2kB/5.526MB
+
+10ac4908093d: Downloading [=>                                                 ]  937.2kB/30.43MBwnloading [=================>                                 ] 10ac4908093d: Downloading [==>                                                ]   1.56MB/30.43MBwnloading [======================>                            ] 10ac4908093d: Downloading [===>                                               ]  2.177MB/30.43MBwnloading [============================>                      ] 10ac4908093d: Downloading [====>                                              ]    2.8MB/30.43MBwnloading [====================================>              ]  4.086MB/5.526MB
+
+a721db3e3f3d: Downloading [==========================================>        ]  4.676MB/5.526MB
+
+10ac4908093d: Downloading [=====>                                             ] 10ac4908093d: Pull complete
+
+44779101e748: Pull complete
+
+a721db3e3f3d: Pull complete
+
+1850a929b84a: Pull complete
+
+397a918c7da3: Pull complete
+
+806be17e856d: Pull complete
+
+634de6c90876: Pull complete
+
+cd00854cfb1a: Pull complete
+
+Digest: sha256:bfc25a68e113de43d0d112f5a7126df8e278579c3224e3923359e1c1d8d5ce6e
+
+Status: Downloaded newer image for mariadb:10.10.2
+
+Pulling adminer (adminer:4.8.1)...
+
+4.8.1: Pulling from library/adminer
+
+34df401c391c: Pull complete
+
+942860e9b081: Pull complete
+
+f571177b537e: Pull complete
+
+78d7a59571f8: Pull complete
+
+530e7e02f755: Pull complete
+
+03ee8734c62c: Pull complete
+
+ed7a0cc37cf2: Pull complete
+
+Digest: sha256:3751b49306d8fd25567ed2222d4f1fc55415badbb827956d38e8ca3e7167a5d8
+
+Status: Downloaded newer image for adminer:4.8.1
+
+Creating compose_dz_db_1      ... done
+
+Creating compose_dz_adminer_1 ... done
+
+Attaching to compose_dz_db_1, compose_dz_adminer_1
+
+db_1       | 2023-07-24 16:17:15+00:00 [Note] [Entrypoint]: Entrypoint script for MariaDB Server 1:10.10.2+maria~ubu2204 started.
+
+adminer_1  | [Mon Jul 24 16:17:15 2023] PHP 7.4.33 Development Server (http://[::]:8080) started
+
+db_1       | 2023-07-24 16:17:16+00:00 [Note] [Entrypoint]: Switching to dedicated user 'mysql'
+
+db_1       | 2023-07-24 16:17:16+00:00 [Note] [Entrypoint]: Entrypoint script for MariaDB Server 1:10.10.2+maria~ubu2204 started.
+
+db_1       | 2023-07-24 16:17:16+00:00 [Note] [Entrypoint]: Initializing database files
+
+db_1       | 
+
+db_1       | 
+
+db_1       | PLEASE REMEMBER TO SET A PASSWORD FOR THE MariaDB root USER !
+
+db_1       | To do so, start the server, then issue the following command:
+
+db_1       | 
+
+db_1       | '/usr/bin/mysql_secure_installation'
+
+db_1       | 
+
+db_1       | which will also give you the option of removing the test
+
+db_1       | databases and anonymous user created by default.  This is
+
+db_1       | strongly recommended for production servers.
+
+db_1       | 
+
+db_1       | See the MariaDB Knowledgebase at https://mariadb.com/kb
+
+db_1       | 
+
+db_1       | Please report any problems at https://mariadb.org/jira
+
+db_1       | 
+
+db_1       | The latest information about MariaDB is available at https://mariadb.org/.
+
+db_1       | 
+
+db_1       | Consider joining MariaDB's strong and vibrant community:
+
+db_1       | https://mariadb.org/get-involved/
+
+db_1       | 
+
+db_1       | 2023-07-24 16:17:19+00:00 [Note] [Entrypoint]: Database files initialized
+
+db_1       | 2023-07-24 16:17:19+00:00 [Note] [Entrypoint]: Starting temporary server
+
+db_1       | 2023-07-24 16:17:19+00:00 [Note] [Entrypoint]: Waiting for server startup
+
+db_1       | 2023-07-24 16:17:19 0 [Note] mariadbd (server 10.10.2-MariaDB-1:10.10.2+maria~ubu2204) starting as process 93 ...
+
+db_1       | 2023-07-24 16:17:19 0 [Note] InnoDB: Compressed tables use zlib 1.2.11
+
+db_1       | 2023-07-24 16:17:19 0 [Note] InnoDB: Number of transaction pools: 1
+
+db_1       | 2023-07-24 16:17:19 0 [Note] InnoDB: Using SSE4.2 crc32 instructions
+
+db_1       | 2023-07-24 16:17:19 0 [Note] mariadbd: O_TMPFILE is not supported on /tmp (disabling future attempts)
+
+db_1       | 2023-07-24 16:17:19 0 [Note] InnoDB: Using liburing
+
+db_1       | 2023-07-24 16:17:19 0 [Note] InnoDB: Initializing buffer pool, total size = 128.000MiB, chunk size = 2.000MiB
+
+db_1       | 2023-07-24 16:17:19 0 [Note] InnoDB: Completed initialization of buffer pool
+
+db_1       | 2023-07-24 16:17:19 0 [Note] InnoDB: File system buffers for log disabled (block size=512 bytes)
+
+db_1       | 2023-07-24 16:17:19 0 [Note] InnoDB: 128 rollback segments are active.
+
+db_1       | 2023-07-24 16:17:19 0 [Note] InnoDB: Setting file './ibtmp1' size to 12.000MiB. Physically writing the file full; Please wait ...
+
+db_1       | 2023-07-24 16:17:19 0 [Note] InnoDB: File './ibtmp1' size is now 12.000MiB.
+
+db_1       | 2023-07-24 16:17:19 0 [Note] InnoDB: log sequence number 46590; transaction id 14
+
+db_1       | 2023-07-24 16:17:19 0 [Note] Plugin 'FEEDBACK' is disabled.
+
+db_1       | 2023-07-24 16:17:20 0 [Warning] 'user' entry 'root@01a207febdcb' ignored in --skip-name-resolve mode.
+
+db_1       | 2023-07-24 16:17:20 0 [Warning] 'proxies_priv' entry '@% root@01a207febdcb' ignored in --skip-name-resolve mode.
+
+db_1       | 2023-07-24 16:17:20 0 [Note] mariadbd: ready for connections.
+
+db_1       | Version: '10.10.2-MariaDB-1:10.10.2+maria~ubu2204'  socket: '/run/mysqld/mysqld.sock'  port: 0  mariadb.org binary distribution
+
+db_1       | 2023-07-24 16:17:20+00:00 [Note] [Entrypoint]: Temporary server started.
+
+db_1       | 2023-07-24 16:17:24+00:00 [Note] [Entrypoint]: Securing system users (equivalent to running mysql_secure_installation)
+
+db_1       | 
+
+db_1       | 2023-07-24 16:17:24+00:00 [Note] [Entrypoint]: Stopping temporary server
+
+db_1       | 2023-07-24 16:17:24 0 [Note] mariadbd (initiated by: unknown): Normal shutdown
+
+db_1       | 2023-07-24 16:17:24 0 [Note] InnoDB: FTS optimize thread exiting.
+
+db_1       | 2023-07-24 16:17:25 0 [Note] InnoDB: Starting shutdown...
+
+db_1       | 2023-07-24 16:17:25 0 [Note] InnoDB: Dumping buffer pool(s) to /var/lib/mysql/ib_buffer_pool
+
+db_1       | 2023-07-24 16:17:25 0 [Note] InnoDB: Buffer pool(s) dump completed at 230724 16:17:25
+
+db_1       | 2023-07-24 16:17:25 0 [Note] InnoDB: Removed temporary tablespace data file: "./ibtmp1"
+
+db_1       | 2023-07-24 16:17:25 0 [Note] InnoDB: Shutdown completed; log sequence number 46590; transaction id 15
+
+db_1       | 2023-07-24 16:17:25 0 [Note] mariadbd: Shutdown complete
+
+db_1       | 
+
+db_1       | 2023-07-24 16:17:25+00:00 [Note] [Entrypoint]: Temporary server stopped
+
+db_1       | 
+
+db_1       | 2023-07-24 16:17:25+00:00 [Note] [Entrypoint]: MariaDB init process done. Ready for start up.
+
+db_1       | 
+
+db_1       | 2023-07-24 16:17:25 0 [Note] mariadbd (server 10.10.2-MariaDB-1:10.10.2+maria~ubu2204) starting as process 1 ...
+
+db_1       | 2023-07-24 16:17:25 0 [Note] InnoDB: Compressed tables use zlib 1.2.11
+
+db_1       | 2023-07-24 16:17:25 0 [Note] InnoDB: Number of transaction pools: 1
+
+db_1       | 2023-07-24 16:17:25 0 [Note] InnoDB: Using SSE4.2 crc32 instructions
+
+db_1       | 2023-07-24 16:17:25 0 [Note] mariadbd: O_TMPFILE is not supported on /tmp (disabling future attempts)
+
+db_1       | 2023-07-24 16:17:25 0 [Note] InnoDB: Using liburing
+
+db_1       | 2023-07-24 16:17:25 0 [Note] InnoDB: Initializing buffer pool, total size = 128.000MiB, chunk size = 2.000MiB
+
+db_1       | 2023-07-24 16:17:25 0 [Note] InnoDB: Completed initialization of buffer pool
+
+db_1       | 2023-07-24 16:17:25 0 [Note] InnoDB: File system buffers for log disabled (block size=512 bytes)
+
+db_1       | 2023-07-24 16:17:25 0 [Note] InnoDB: 128 rollback segments are active.
+
+db_1       | 2023-07-24 16:17:25 0 [Note] InnoDB: Setting file './ibtmp1' size to 12.000MiB. Physically writing the file full; Please wait ...
+
+db_1       | 2023-07-24 16:17:25 0 [Note] InnoDB: File './ibtmp1' size is now 12.000MiB.
+
+db_1       | 2023-07-24 16:17:25 0 [Note] InnoDB: log sequence number 46590; transaction id 14
+
+db_1       | 2023-07-24 16:17:25 0 [Note] Plugin 'FEEDBACK' is disabled.
+
+db_1       | 2023-07-24 16:17:25 0 [Note] InnoDB: Loading buffer pool(s) from /var/lib/mysql/ib_buffer_pool
+
+db_1       | 2023-07-24 16:17:25 0 [Warning] You need to use --log-bin to make --expire-logs-days or --binlog-expire-logs-seconds work.
+
+db_1       | 2023-07-24 16:17:25 0 [Note] InnoDB: Buffer pool(s) load completed at 230724 16:17:25
+
+db_1       | 2023-07-24 16:17:25 0 [Note] Server socket created on IP: '0.0.0.0'.
+
+db_1       | 2023-07-24 16:17:25 0 [Note] Server socket created on IP: '::'.
+
+db_1       | 2023-07-24 16:17:25 0 [Note] mariadbd: ready for connections.
+
+db_1       | Version: '10.10.2-MariaDB-1:10.10.2+maria~ubu2204'  socket: '/run/mysqld/mysqld.sock'  port: 3306  mariadb.org binary distribution
+
+^CGracefully stopping... (press Ctrl+C again to force)
+
+Stopping compose_dz_db_1      ... done
+
+Stopping compose_dz_adminer_1 ... done
+
+root@sbvb:/home/sb/compose_dz#
+
+root@sbvb:/home/sb/compose_dz# docker-compose up -d
+
+Starting compose_dz_db_1      ... done
+
+Starting compose_dz_adminer_1 ... done
+
+root@sbvb:/home/sb/compose_dz# 
+
+
+
+
+
+
+
